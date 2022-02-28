@@ -1,6 +1,6 @@
 package org.cms.bloggyblog.repository;
 
-import org.cms.bloggyblog.model.User;
+import org.cms.bloggyblog.model.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

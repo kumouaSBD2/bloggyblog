@@ -1,8 +1,6 @@
 package org.cms.bloggyblog.controller;
 
-import org.cms.bloggyblog.model.Post;
-import org.cms.bloggyblog.model.User;
-import org.cms.bloggyblog.service.PostService;
+import org.cms.bloggyblog.model.entity.User;
 import org.cms.bloggyblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;

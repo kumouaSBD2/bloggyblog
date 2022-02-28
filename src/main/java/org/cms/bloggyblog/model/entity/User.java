@@ -1,4 +1,4 @@
-package org.cms.bloggyblog.model;
+package org.cms.bloggyblog.model.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

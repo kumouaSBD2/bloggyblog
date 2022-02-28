@@ -1,8 +1,7 @@
 package org.cms.bloggyblog.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.cms.bloggyblog.model.Post;
-import org.cms.bloggyblog.model.User;
+import org.cms.bloggyblog.model.entity.User;
 import org.cms.bloggyblog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
