@@ -25,16 +25,16 @@ import javax.persistence.Table;
 @Table(name = "USER_TABLE")
 public class User {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "USER_ID")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  @Column(name = "USER_ID")
+  private Long id;
 
-    @Column(name = "NAME")
-    private String name;
+  @Column(name = "NAME")
+  private String name;
 
-//    @OneToOne
-//    @JoinColumn(name = "POST_ID")
-//    private Post post;
+  //    @OneToOne
+  //    @JoinColumn(name = "POST_ID")
+  //    private Post post;
 
 }

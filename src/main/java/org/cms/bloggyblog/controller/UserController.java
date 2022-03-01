@@ -18,31 +18,30 @@ import java.util.List;
 @RequestMapping(path = "/blog-users")
 public class UserController {
 
-    private final UserService userService;
+  private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+  @Autowired
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
-    @GetMapping(path = {"/", ""})
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
-    }
+  @GetMapping(path = {"/", ""})
+  public List<User> getAllUsers() {
+    return userService.getAllUsers();
+  }
 
-    @PutMapping(value = "/{id}")
-    public User updateUser(@PathVariable(value = "id") Long id, @RequestBody String name) {
-        return userService.upsert(id, name);
-    }
+  @PutMapping(value = "/{id}")
+  public User updateUser(@PathVariable(value = "id") Long id, @RequestBody String name) {
+    return userService.upsert(id, name);
+  }
 
-    @PostMapping(value = "/{name}")
-    public User addUser(@PathVariable(value = "name") String name) {
+  @PostMapping(value = "/{name}")
+  public User addUser(@PathVariable(value = "name") String name) {
     return userService.save(User.builder().name(name).build());
-    }
+  }
 
-    @DeleteMapping(value = "/{id}")
-    public void deletePost(@PathVariable(value = "id") Long id) {
-        userService.deleteById(id);
-    }
-
+  @DeleteMapping(value = "/{id}")
+  public void deletePost(@PathVariable(value = "id") Long id) {
+    userService.deleteById(id);
+  }
 }

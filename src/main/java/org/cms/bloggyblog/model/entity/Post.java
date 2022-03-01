@@ -22,7 +22,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "POST_TABLE")
-public class Post{
+public class Post {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)

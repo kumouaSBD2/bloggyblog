@@ -12,27 +12,26 @@ import java.util.List;
 @Slf4j
 public class UserService {
 
-    private final UserRepository userRepository;
+  private final UserRepository userRepository;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+  @Autowired
+  public UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
+  }
 
-    public User save(User user) {
-        return userRepository.saveAndFlush(user);
-    }
+  public User save(User user) {
+    return userRepository.saveAndFlush(user);
+  }
 
-    public User upsert(Long id, String name) {
-        return userRepository.save(User.builder().id(id).name(name).build());
-    }
+  public User upsert(Long id, String name) {
+    return userRepository.save(User.builder().id(id).name(name).build());
+  }
 
-    public void deleteById(Long id) {
-        userRepository.deleteById(id);
-    }
-
+  public void deleteById(Long id) {
+    userRepository.deleteById(id);
+  }
 }

@@ -13,26 +13,26 @@ import java.util.List;
 @Slf4j
 public class PostService {
 
-    private final PostRepository postRepository;
+  private final PostRepository postRepository;
 
-    @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+  @Autowired
+  public PostService(PostRepository postRepository) {
+    this.postRepository = postRepository;
+  }
 
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
-    }
+  public List<Post> getAllPosts() {
+    return postRepository.findAll();
+  }
 
-    public Post save(Post post) {
-        return postRepository.saveAndFlush(post);
-    }
+  public Post save(Post post) {
+    return postRepository.saveAndFlush(post);
+  }
 
-    public Post upsert(Long id, String title, String body, User user) {
-        return postRepository.save(Post.builder().id(id).title(title).body(body).user(user).build());
-    }
+  public Post upsert(Long id, String title, String body, User user) {
+    return postRepository.save(Post.builder().id(id).title(title).body(body).user(user).build());
+  }
 
-    public void deleteById(Long id) {
-        postRepository.deleteById(id);
-    }
+  public void deleteById(Long id) {
+    postRepository.deleteById(id);
+  }
 }

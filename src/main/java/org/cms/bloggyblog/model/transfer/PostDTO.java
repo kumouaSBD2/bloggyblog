@@ -12,10 +12,9 @@ import org.springframework.validation.annotation.Validated;
 @Validated
 public class PostDTO {
 
-    private String title;
+  private String postTitle;
 
-    private String body;
+  private String postBody;
 
-    private User user;
-
+  private User postUser;
 }
