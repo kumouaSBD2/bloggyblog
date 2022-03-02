@@ -7,6 +7,7 @@ import org.cms.bloggyblog.model.entity.User
 import org.cms.bloggyblog.repository.EntryRepository
 import org.cms.bloggyblog.repository.UserRepository
 import org.codehaus.jackson.map.ObjectMapper
+import org.jeasy.random.EasyRandom
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -24,14 +25,14 @@ class BlogEntryControllerSpec extends Specification {
     @Autowired
     private MockMvc mvc
     private ObjectMapper objectMapper = new ObjectMapper()
-    private UserRepository userRepository = Mock()
     private EntryRepository entryRepository = Mock()
 
     def "when POST is performed with no user set"() {
         given:
+        EasyRandom easyRandom = new EasyRandom()
         String uri = "/blog-entries"
         String contentType = "application/json"
-        String title = "Hello"
+        String title = easyRandom.nextObject(String.class)
         String body = "Hello, World!"
         Entry entry = Entry.builder().body(body).title(title).build()
         String requestBodyJson =
@@ -52,7 +53,8 @@ class BlogEntryControllerSpec extends Specification {
 
     def "when PUT is performed with user set"() {
         given:
-        String userName = "Tester"
+        EasyRandom easyRandom = new EasyRandom()
+        String userName = easyRandom.nextObject(String.class)
         User testUser = User.builder().name(userName).build()
         String name = testUser.getName()
 

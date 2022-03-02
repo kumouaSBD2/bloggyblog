@@ -1,6 +1,5 @@
 package org.cms.bloggyblog.mapper;
 
-import org.cms.bloggyblog.model.transfer.Entry;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -9,7 +8,7 @@ public interface EntryMapper {
 
   EntryMapper INSTANCE = Mappers.getMapper(EntryMapper.class);
 
-  Entry map(org.cms.bloggyblog.model.entity.Entry post);
+  org.cms.bloggyblog.model.transfer.Entry map(org.cms.bloggyblog.model.entity.Entry entry);
 
-  org.cms.bloggyblog.model.entity.Entry map(Entry entry);
+  org.cms.bloggyblog.model.entity.Entry map(org.cms.bloggyblog.model.transfer.Entry entry);
 }

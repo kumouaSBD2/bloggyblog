@@ -10,11 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Data
@@ -22,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USER_TABLE")
+@Table(name = "USER")
 public class User {
 
   @Id
@@ -32,9 +27,5 @@ public class User {
 
   @Column(name = "NAME")
   private String name;
-
-  //    @OneToOne
-  //    @JoinColumn(name = "POST_ID")
-  //    private Post post;
 
 }
