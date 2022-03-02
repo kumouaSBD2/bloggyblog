@@ -1,11 +1,11 @@
 package org.cms.bloggyblog.controller;
 
-import org.cms.bloggyblog.mapper.PostMapper;
-import org.cms.bloggyblog.model.entity.Post;
+import org.cms.bloggyblog.mapper.EntryMapper;
 import org.cms.bloggyblog.model.entity.User;
-import org.cms.bloggyblog.service.PostService;
-import org.cms.bloggyblog.model.transfer.PostDTO;
+import org.cms.bloggyblog.model.transfer.Entry;
+import org.cms.bloggyblog.service.EntryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,42 +13,44 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/blog-posts")
-public class PostController {
+public class EntryController {
 
-  private final PostService postService;
+  private final EntryService entryService;
 
   @Autowired
-  public PostController(PostService postService) {
-    this.postService = postService;
+  public EntryController(EntryService entryService) {
+    this.entryService = entryService;
   }
 
   @GetMapping(path = {"/", ""})
-  public List<Post> getAllPosts() {
-    return postService.getAllPosts();
+  public List<org.cms.bloggyblog.model.entity.Entry> getAllPosts() {
+    return entryService.getAllPosts();
   }
 
   @PutMapping(value = "/{id}/{title}")
-  public PostDTO updatePost(
+  public Entry updatePost(
       @PathVariable(value = "id") Long id,
       @PathVariable(value = "title") String title,
       @RequestBody String body,
       User user) {
-    return PostMapper.INSTANCE.map(postService.upsert(id, title, body, user));
+    return EntryMapper.INSTANCE.map(entryService.upsert(id, title, body, user));
   }
 
+  @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public PostDTO addPost(@RequestBody PostDTO postDTO) {
-    return PostMapper.INSTANCE.map(postService.save(PostMapper.INSTANCE.map(postDTO)));
+  public Entry addPost(@RequestBody Entry entry) {
+    return EntryMapper.INSTANCE.map(entryService.save(EntryMapper.INSTANCE.map(entry)));
   }
 
   @DeleteMapping(value = "/{id}")
   public void deletePost(@PathVariable(value = "id") Long id) {
-    postService.deleteById(id);
+    entryService.deleteById(id);
   }
 }

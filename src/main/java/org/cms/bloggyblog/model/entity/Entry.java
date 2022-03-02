@@ -21,12 +21,12 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "POST_TABLE")
-public class Post {
+@Table(name = "ENTRY_TABLE")
+public class Entry {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "POST_ID")
+  @Column(name = "ID")
   private Long id;
 
   @Column(name = "TITLE")

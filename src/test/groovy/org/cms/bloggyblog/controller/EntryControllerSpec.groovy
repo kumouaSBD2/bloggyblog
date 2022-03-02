@@ -1,21 +1,24 @@
 package org.cms.bloggyblog.controller
 
 import org.cms.bloggyblog.BloggyBlogApplication
-import org.cms.bloggyblog.model.entity.Post
+import org.cms.bloggyblog.model.entity.Entry
 import org.cms.bloggyblog.model.entity.User
-import org.cms.bloggyblog.repository.PostRepository
+import org.cms.bloggyblog.repository.EntryRepository
 import org.cms.bloggyblog.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import spock.lang.Specification
+
+import javax.transaction.Transactional
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import org.springframework.test.web.servlet.MockMvc
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = BloggyBlogApplication, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class PostControllerSpec extends Specification {
+class EntryControllerSpec extends Specification {
 
     @Autowired
     private MockMvc mvc
@@ -24,8 +27,9 @@ class PostControllerSpec extends Specification {
     private UserRepository userRepository = Mock()
 
     @Autowired
-    private PostRepository postRepository = Mock()
+    private EntryRepository postRepository = Mock()
 
+    @Transactional
     def "when POST is performed with no user set"() {
         given:
         String uri = "/blog-posts"
@@ -42,12 +46,14 @@ class PostControllerSpec extends Specification {
         response.andExpect(status().isOk())
     }
 
+    @Transactional
     def "when PUT is performed with user set"() {
         given:
         User testUser = new User()
         testUser.setId(1L)
         testUser.setName("Tester")
-        String uri = "/blog-posts/1/Test"
+        Long id = userRepository.save(testUser).getId()
+        String uri = "/blog-posts/$id/Test"
         String contentType = "application/json"
         String body = "Testing"
         userRepository.save(testUser)
@@ -63,14 +69,15 @@ class PostControllerSpec extends Specification {
         response.andExpect(status().isOk())
     }
 
+    @Transactional
     def "when DELETE is performed with valid ID"() {
         given:
-        String uri = "/blog-posts/1"
-        Post post = new Post()
-        post.setId(1L)
+        Entry post = new Entry()
         post.setBody("Dummy1")
         post.setTitle("Dummy2")
-        postRepository.save(post)
+        Long id = postRepository.save(post).getId()
+        String uri = "/blog-posts/$id"
+
 
         when:
         def response = mvc.perform(MockMvcRequestBuilders

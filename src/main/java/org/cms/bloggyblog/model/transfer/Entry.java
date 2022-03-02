@@ -10,11 +10,11 @@ import org.springframework.validation.annotation.Validated;
 @AllArgsConstructor
 @NoArgsConstructor
 @Validated
-public class PostDTO {
+public class Entry {
 
-  private String postTitle;
+  private String title;
 
-  private String postBody;
+  private String body;
 
-  private User postUser;
+  private User user;
 }
