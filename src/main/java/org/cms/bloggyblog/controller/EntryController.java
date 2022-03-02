@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/blog-posts")
+@RequestMapping(path = "/blog-entries")
 public class EntryController {
 
   private final EntryService entryService;
@@ -30,12 +30,13 @@ public class EntryController {
   }
 
   @GetMapping(path = {"/", ""})
-  public List<org.cms.bloggyblog.model.entity.Entry> getAllPosts() {
-    return entryService.getAllPosts();
+  public List<org.cms.bloggyblog.model.entity.Entry> getAllEntries() {
+    return entryService.getAllEntries();
   }
 
+  @ResponseStatus(HttpStatus.CREATED)
   @PutMapping(value = "/{id}/{title}")
-  public Entry updatePost(
+  public Entry updateEntry(
       @PathVariable(value = "id") Long id,
       @PathVariable(value = "title") String title,
       @RequestBody String body,
@@ -45,12 +46,12 @@ public class EntryController {
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public Entry addPost(@RequestBody Entry entry) {
+  public Entry addEntry(@RequestBody Entry entry) {
     return EntryMapper.INSTANCE.map(entryService.save(EntryMapper.INSTANCE.map(entry)));
   }
 
   @DeleteMapping(value = "/{id}")
-  public void deletePost(@PathVariable(value = "id") Long id) {
+  public void deleteEntry(@PathVariable(value = "id") Long id) {
     entryService.deleteById(id);
   }
 }

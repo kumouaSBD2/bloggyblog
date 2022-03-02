@@ -15,8 +15,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import spock.lang.Specification
 
-import javax.transaction.Transactional
-
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @AutoConfigureMockMvc
@@ -26,16 +24,13 @@ class BlogEntryControllerSpec extends Specification {
     @Autowired
     private MockMvc mvc
     private ObjectMapper objectMapper = new ObjectMapper()
-
-
     private UserRepository userRepository = Mock()
-
     private EntryRepository entryRepository = Mock()
 
     def "when POST is performed with no user set"() {
         given:
-        String uri = "/blog-posts"
-        String contentType =  "application/json"
+        String uri = "/blog-entries"
+        String contentType = "application/json"
         String title = "Hello"
         String body = "Hello, World!"
         Entry entry = Entry.builder().body(body).title(title).build()
@@ -44,53 +39,66 @@ class BlogEntryControllerSpec extends Specification {
                         EntryMapper.INSTANCE.map(entry))
         entryRepository.save(entry) >> entry
 
-
-
         when:
         def response = mvc.perform(MockMvcRequestBuilders
                 .post(uri)
                 .content(requestBodyJson)
-
                 .contentType(contentType))
 
         then:
         response.andExpect(status().isCreated())
-        .andExpect(MockMvcResultMatchers.jsonPath('$.title').value(title))
+                .andExpect(MockMvcResultMatchers.jsonPath('$.title').value(title))
     }
 
-    @Transactional
     def "when PUT is performed with user set"() {
         given:
-        User testUser = new User()
-        testUser.setId(1L)
-        testUser.setName("Tester")
-        Long id = userRepository.save(testUser).getId()
-        String uri = "/blog-posts/$id/Test"
+        String userName = "Tester"
+        User testUser = User.builder().name(userName).build()
+        String name = testUser.getName()
+
+        mvc.perform(MockMvcRequestBuilders
+                .post("/blog-users/$name"))
+
+        String title = "Test"
         String contentType = "application/json"
         String body = "Testing"
-        userRepository.save(testUser)
+
+        Entry entry = Entry.builder().body(body).build()
+        String requestBodyJson =
+                objectMapper.writeValueAsString(
+                        EntryMapper.INSTANCE.map(entry))
+        entryRepository.save(entry) >> entry
+        String uri = "/blog-entries/2/$title"
+
 
         when:
         def response = mvc.perform(MockMvcRequestBuilders
                 .put(uri)
-                .content(body)
+                .content(requestBodyJson)
                 .contentType(contentType))
-
 
         then:
         response.andExpect(status().isCreated())
-
     }
 
 
     def "when DELETE is performed with valid ID"() {
         given:
-        Entry post = new Entry()
-        post.setBody("Dummy1")
-        post.setTitle("Dummy2")
-        Long id = postRepository.save(post).getId()
-        String uri = "/blog-posts/$id"
+        Long id = 1L
+        String title = "Hello"
+        String body = "Hello, World!"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson =
+                objectMapper.writeValueAsString(
+                        EntryMapper.INSTANCE.map(entry))
+        entryRepository.save(entry) >> entry
+        String contentType = "application/json"
+        String uri = "/blog-entries/$id"
 
+        mvc.perform(MockMvcRequestBuilders
+                .post("/blog-entries")
+                .content(requestBodyJson)
+                .contentType(contentType))
 
         when:
         def response = mvc.perform(MockMvcRequestBuilders

@@ -13,26 +13,26 @@ import java.util.List;
 @Slf4j
 public class EntryService {
 
-  private final EntryRepository postRepository;
+  private final EntryRepository entryRepository;
 
   @Autowired
-  public EntryService(EntryRepository postRepository) {
-    this.postRepository = postRepository;
+  public EntryService(EntryRepository entryRepository) {
+    this.entryRepository = entryRepository;
   }
 
-  public List<Entry> getAllPosts() {
-    return postRepository.findAll();
+  public List<Entry> getAllEntries() {
+    return entryRepository.findAll();
   }
 
   public Entry save(Entry post) {
-    return postRepository.save(post);
+    return entryRepository.save(post);
   }
 
   public Entry upsert(Long id, String title, String body, User user) {
-    return postRepository.save(Entry.builder().id(id).title(title).body(body).user(user).build());
+    return entryRepository.save(Entry.builder().id(id).title(title).body(body).user(user).build());
   }
 
   public void deleteById(Long id) {
-    postRepository.deleteById(id);
+    entryRepository.deleteById(id);
   }
 }
