@@ -1,6 +1,5 @@
 package org.cms.bloggyblog.service;
 
-import lombok.extern.slf4j.Slf4j;
 import org.cms.bloggyblog.model.entity.Entry;
 import org.cms.bloggyblog.model.entity.User;
 import org.cms.bloggyblog.repository.EntryRepository;
@@ -23,13 +22,14 @@ public class EntryService {
     return entryRepository.findAll();
   }
 
-  public Entry save(Entry post) {
-    return entryRepository.save(post);
+  public Entry save(Entry entry) {
+    return entryRepository.save(entry);
   }
 
   public Entry upsert(Long id, String title, String body, User user) {
     return entryRepository.save(Entry.builder().id(id).title(title).body(body).user(user).build());
   }
+
 
   public void deleteById(Long id) {
     entryRepository.deleteById(id);

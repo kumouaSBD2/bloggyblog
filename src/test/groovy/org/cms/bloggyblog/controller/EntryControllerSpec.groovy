@@ -5,7 +5,6 @@ import org.cms.bloggyblog.mapper.EntryMapper
 import org.cms.bloggyblog.model.entity.Entry
 import org.cms.bloggyblog.model.entity.User
 import org.cms.bloggyblog.repository.EntryRepository
-import org.cms.bloggyblog.repository.UserRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.jeasy.random.EasyRandom
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = BloggyBlogApplication, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class BlogEntryControllerSpec extends Specification {
+class EntryControllerSpec extends Specification {
 
     @Autowired
     private MockMvc mvc

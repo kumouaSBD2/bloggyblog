@@ -1,4 +1,4 @@
-package org.cms.bloggyblog.controller;
+package org.cms.bloggyblog.mapper.controller;
 
 import org.cms.bloggyblog.mapper.EntryMapper;
 import org.cms.bloggyblog.model.entity.User;

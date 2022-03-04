@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Data
@@ -25,6 +26,7 @@ public class User {
   @Column(name = "USER_ID")
   private Long id;
 
+//  @OneToMany(mappedBy="Entry.user")
   @Column(name = "NAME")
   private String name;
 
