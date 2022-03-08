@@ -1,8 +1,8 @@
 package org.cms.bloggyblog.controller
 
 import org.cms.bloggyblog.BloggyBlogApplication
-import org.cms.bloggyblog.model.entity.User
-import org.cms.bloggyblog.repository.UserRepository
+import org.cms.bloggyblog.model.entity.Blogger
+import org.cms.bloggyblog.repository.BloggerRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -16,13 +16,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest(classes = BloggyBlogApplication, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerSpec extends Specification {
+class BloggerControllerSpec extends Specification {
 
     @Autowired
     MockMvc mvc
 
     ObjectMapper objectMapper = new ObjectMapper()
-    UserRepository userRepository = Mock()
+    BloggerRepository userRepository = Mock()
 
     def "adding new user"() {
         given:
@@ -44,7 +44,7 @@ class UserControllerSpec extends Specification {
         Long id = 1L
         String name = "Tester"
         String uri = "/blog-users/$id"
-        User user = User.builder().id(id).name(name).build()
+        Blogger user = Blogger.builder().id(id).name(name).build()
         userRepository.save(user) >> user
 
         when:
@@ -63,7 +63,7 @@ class UserControllerSpec extends Specification {
         given:
         Long id = 1L
         String name = "Tester"
-        User user = User.builder().id(id).name(name).build()
+        Blogger user = Blogger.builder().id(id).name(name).build()
         String uriDelete = "/blog-users/$id"
         String uriPost = "/blog-users/$name"
 

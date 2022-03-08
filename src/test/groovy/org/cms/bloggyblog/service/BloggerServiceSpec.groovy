@@ -1,14 +1,13 @@
 package org.cms.bloggyblog.service
 
-import org.cms.bloggyblog.model.entity.User
-import org.cms.bloggyblog.repository.EntryRepository
-import org.cms.bloggyblog.repository.UserRepository
+import org.cms.bloggyblog.model.entity.Blogger
+import org.cms.bloggyblog.repository.BloggerRepository
 import spock.lang.Specification
 
-class UserServiceSpec extends Specification {
+class BloggerServiceSpec extends Specification {
 
-    UserRepository userRepository = Mock()
-    UserService userService = new UserService(userRepository)
+    BloggerRepository userRepository = Mock()
+    BloggerService userService = new BloggerService(userRepository)
 
     def "get all users"() {
         when:
@@ -20,7 +19,7 @@ class UserServiceSpec extends Specification {
 
     def "save user"() {
         given:
-        User user = User.builder().id(1L).name("Tester").build()
+        Blogger user = Blogger.builder().id(1L).name("Tester").build()
 
         when:
         userService.save(user)
@@ -38,12 +37,12 @@ class UserServiceSpec extends Specification {
         userService.upsert(id, name)
 
         then:
-        1 * userRepository.save(User.builder().id(id).name(name).build())
+        1 * userRepository.save(Blogger.builder().id(id).name(name).build())
     }
 
     def "delete user"() {
         given:
-        User user = User.builder().id(1L).name("Tester").build()
+        Blogger user = Blogger.builder().id(1L).name("Tester").build()
 
         when:
         userService.deleteById(user.getId())

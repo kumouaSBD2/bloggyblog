@@ -26,6 +26,7 @@
         <gmavenplus-plugin.version>1.5</gmavenplus-plugin.version>
         <org.apache.maven.plugins.version>3.8.1</org.apache.maven.plugins.version>
         <easy-random-core.version>5.0.0</easy-random-core.version>
+        <owasp.version>20211018.2</owasp.version>
     </properties>
     <dependencies>
         <dependency>
@@ -105,6 +106,13 @@
             <groupId>org.jeasy</groupId>
             <artifactId>easy-random-core</artifactId>
             <version>${easy-random-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.googlecode.owasp-java-html-sanitizer</groupId>
+            <artifactId>owasp-java-html-sanitizer</artifactId>
+            <version>${owasp.version}</version>
+            <type>bundle</type>
         </dependency>
 
     </dependencies>

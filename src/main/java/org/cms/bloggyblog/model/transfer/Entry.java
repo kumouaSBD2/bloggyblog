@@ -1,7 +1,7 @@
 package org.cms.bloggyblog.model.transfer;
 
 import lombok.Data;
-import org.cms.bloggyblog.model.entity.User;
+import org.cms.bloggyblog.model.entity.Blogger;
 
 @Data
 public class Entry {
@@ -10,5 +10,5 @@ public class Entry {
 
   private String body;
 
-  private User user;
+  private Blogger blogger;
 }

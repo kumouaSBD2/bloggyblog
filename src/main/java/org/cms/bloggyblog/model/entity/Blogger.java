@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Data
@@ -18,16 +17,14 @@ import javax.persistence.Table;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "USER")
-public class User {
+@Table(name = "BLOGGER")
+public class Blogger {
 
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  @Column(name = "USER_ID")
+  @Column(name = "BLOGGER_ID")
   private Long id;
 
-//  @OneToMany(mappedBy="Entry.user")
   @Column(name = "NAME")
   private String name;
-
 }

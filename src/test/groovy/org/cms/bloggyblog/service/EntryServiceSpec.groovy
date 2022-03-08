@@ -1,7 +1,7 @@
 package org.cms.bloggyblog.service
 
 import org.cms.bloggyblog.model.entity.Entry
-import org.cms.bloggyblog.model.entity.User
+import org.cms.bloggyblog.model.entity.Blogger
 import org.cms.bloggyblog.repository.EntryRepository
 import spock.lang.Specification
 
@@ -31,19 +31,19 @@ class EntryServiceSpec extends Specification {
 
     def "when updating a post with a valid user ID"() {
         given:
-        User user = User.builder().id(1L).name("Tester").build()
+        Blogger user = Blogger.builder().id(1L).name("Tester").build()
 
         when:
         entryService.upsert(1L, "Test", "Testing", user)
 
         then:
-        1 * entryRepository.save(Entry.builder().id(1L).title("Test").body("Testing").user(user).build())
+        1 * entryRepository.save(Entry.builder().id(1L).title("Test").body("Testing").blogger(user).build())
 
     }
 
     def "deleting entry by id"() {
         given:
-        User user = User.builder().id(1L).name("Tester").build()
+        Blogger user = Blogger.builder().id(1L).name("Tester").build()
 
         when:
         entryService.deleteById(user.getId())

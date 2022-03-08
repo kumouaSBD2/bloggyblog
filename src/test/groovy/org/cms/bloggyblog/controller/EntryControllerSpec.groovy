@@ -3,7 +3,7 @@ package org.cms.bloggyblog.controller
 import org.cms.bloggyblog.BloggyBlogApplication
 import org.cms.bloggyblog.mapper.EntryMapper
 import org.cms.bloggyblog.model.entity.Entry
-import org.cms.bloggyblog.model.entity.User
+import org.cms.bloggyblog.model.entity.Blogger
 import org.cms.bloggyblog.repository.EntryRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.jeasy.random.EasyRandom
@@ -26,7 +26,7 @@ class EntryControllerSpec extends Specification {
     private ObjectMapper objectMapper = new ObjectMapper()
     private EntryRepository entryRepository = Mock()
 
-    def "when POST is performed with no user set"() {
+    def "when POST is performed with no blogger set"() {
         given:
         EasyRandom easyRandom = new EasyRandom()
         String uri = "/blog-entries"
@@ -50,12 +50,12 @@ class EntryControllerSpec extends Specification {
                 .andExpect(MockMvcResultMatchers.jsonPath('$.title').value(title))
     }
 
-    def "when PUT is performed with user set"() {
+    def "when PUT is performed with blogger set"() {
         given:
         EasyRandom easyRandom = new EasyRandom()
-        String userName = easyRandom.nextObject(String.class)
-        User testUser = User.builder().name(userName).build()
-        String name = testUser.getName()
+        String bloggerName = easyRandom.nextObject(String.class)
+        Blogger testBlogger = Blogger.builder().name(bloggerName).build()
+        String name = testBlogger.getName()
 
         mvc.perform(MockMvcRequestBuilders
                 .post("/blog-users/$name"))

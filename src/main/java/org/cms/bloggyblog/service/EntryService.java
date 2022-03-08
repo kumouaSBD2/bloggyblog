@@ -1,7 +1,6 @@
 package org.cms.bloggyblog.service;
 
 import org.cms.bloggyblog.model.entity.Entry;
-import org.cms.bloggyblog.model.entity.User;
 import org.cms.bloggyblog.repository.EntryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +24,6 @@ public class EntryService {
   public Entry save(Entry entry) {
     return entryRepository.save(entry);
   }
-
-  public Entry upsert(Long id, String title, String body, User user) {
-    return entryRepository.save(Entry.builder().id(id).title(title).body(body).user(user).build());
-  }
-
 
   public void deleteById(Long id) {
     entryRepository.deleteById(id);

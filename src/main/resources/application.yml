@@ -1,7 +1,16 @@
 spring:
-  h2:
-    console:
-      enabled: true
+  application:
+    name: "Bloggy Blog"
 
   datasource:
-    url: jdbc:h2:mem:testdb
+    url: jdbc:sqlserver://localhost;databaseName=BloggyBlogDB
+    username: sa
+    password: p@^!asdW1ord
+    driverClassName: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+  jpa:
+    show-sql: true
+    hibernate:
+      dialect: org.hibernate.dialect.SQLServer2012Dialect
+      ddl-auto: update
+      show_sql: true

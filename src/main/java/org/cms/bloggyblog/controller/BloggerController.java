@@ -1,7 +1,7 @@
 package org.cms.bloggyblog.controller;
 
-import org.cms.bloggyblog.model.entity.User;
-import org.cms.bloggyblog.service.UserService;
+import org.cms.bloggyblog.model.entity.Blogger;
+import org.cms.bloggyblog.service.BloggerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,33 +18,33 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/blog-users")
-public class UserController {
+public class BloggerController {
 
-  private final UserService userService;
+  private final BloggerService bloggerService;
 
   @Autowired
-  public UserController(UserService userService) {
-    this.userService = userService;
+  public BloggerController(BloggerService bloggerService) {
+    this.bloggerService = bloggerService;
   }
 
   @GetMapping(path = {"/", ""})
-  public List<User> getAllUsers() {
-    return userService.getAllUsers();
+  public List<Blogger> getAllUsers() {
+    return bloggerService.getAllUsers();
   }
 
   @PutMapping(value = "/{id}")
-  public User updateUser(@PathVariable(value = "id") Long id, @RequestBody String name) {
-    return userService.upsert(id, name);
+  public Blogger updateUser(@PathVariable(value = "id") Long id, @RequestBody String name) {
+    return bloggerService.upsert(id, name);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @PostMapping(value = "/{name}")
-  public User addUser(@PathVariable(value = "name") String name) {
-    return userService.save(User.builder().name(name).build());
+  @PostMapping(value = {"/", ""})
+  public Blogger addUser(@RequestBody String name) {
+    return bloggerService.save(Blogger.builder().name(name).build());
   }
 
   @DeleteMapping(value = "/{id}")
   public void deletePost(@PathVariable(value = "id") Long id) {
-    userService.deleteById(id);
+    bloggerService.deleteById(id);
   }
 }
