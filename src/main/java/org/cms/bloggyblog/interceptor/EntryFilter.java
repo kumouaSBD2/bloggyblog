@@ -25,6 +25,8 @@ public class EntryFilter extends OncePerRequestFilter {
     String formattedTimeStamp = StringUtils.reverse(timeStamp.format(formatter));
 
     response.addHeader("X-Timestamp-Reverse", formattedTimeStamp);
+
     filterChain.doFilter(request, response);
   }
+
 }

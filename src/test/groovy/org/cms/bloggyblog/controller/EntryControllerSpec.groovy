@@ -7,6 +7,8 @@ import org.cms.bloggyblog.model.entity.Blogger
 import org.cms.bloggyblog.repository.EntryRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.jeasy.random.EasyRandom
+import org.owasp.html.PolicyFactory
+import org.owasp.html.Sanitizers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -107,6 +109,22 @@ class EntryControllerSpec extends Specification {
 
         then:
         response.andExpect(status().isOk())
+    }
+
+    def "OWASP test"() {
+        given:
+        String html = null
+        PolicyFactory policy =
+                Sanitizers.FORMATTING
+                        .and(Sanitizers.BLOCKS)
+                        .and(Sanitizers.LINKS)
+                        .and(Sanitizers.IMAGES)
+                        .and(Sanitizers.TABLES);
+        String safeHtml = policy.sanitize(html);
+
+        expect:
+        null == safeHtml
+
     }
 
 }
