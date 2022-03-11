@@ -28,5 +28,4 @@ public class EntryFilter extends OncePerRequestFilter {
 
     filterChain.doFilter(request, response);
   }
-
 }

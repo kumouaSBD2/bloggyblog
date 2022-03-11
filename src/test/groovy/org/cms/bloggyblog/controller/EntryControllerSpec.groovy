@@ -3,12 +3,11 @@ package org.cms.bloggyblog.controller
 import org.cms.bloggyblog.BloggyBlogApplication
 import org.cms.bloggyblog.mapper.EntryMapper
 import org.cms.bloggyblog.model.entity.Entry
-import org.cms.bloggyblog.model.entity.Blogger
 import org.cms.bloggyblog.repository.EntryRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.jeasy.random.EasyRandom
+import org.owasp.html.HtmlPolicyBuilder
 import org.owasp.html.PolicyFactory
-import org.owasp.html.Sanitizers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -16,6 +15,8 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import spock.lang.Specification
+
+import javax.validation.ConstraintViolation
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -52,39 +53,6 @@ class EntryControllerSpec extends Specification {
                 .andExpect(MockMvcResultMatchers.jsonPath('$.title').value(title))
     }
 
-    def "when PUT is performed with blogger set"() {
-        given:
-        EasyRandom easyRandom = new EasyRandom()
-        String bloggerName = easyRandom.nextObject(String.class)
-        Blogger testBlogger = Blogger.builder().name(bloggerName).build()
-        String name = testBlogger.getName()
-
-        mvc.perform(MockMvcRequestBuilders
-                .post("/blog-users/$name"))
-
-        String title = "Test"
-        String contentType = "application/json"
-        String body = "Testing"
-
-        Entry entry = Entry.builder().body(body).build()
-        String requestBodyJson =
-                objectMapper.writeValueAsString(
-                        EntryMapper.INSTANCE.map(entry))
-        entryRepository.save(entry) >> entry
-        String uri = "/blog-entries/2/$title"
-
-
-        when:
-        def response = mvc.perform(MockMvcRequestBuilders
-                .put(uri)
-                .content(requestBodyJson)
-                .contentType(contentType))
-
-        then:
-        response.andExpect(status().isCreated())
-    }
-
-
     def "when DELETE is performed with valid ID"() {
         given:
         Long id = 1L
@@ -111,19 +79,62 @@ class EntryControllerSpec extends Specification {
         response.andExpect(status().isOk())
     }
 
-    def "OWASP test"() {
+    def "no html in input should return 201"() {
         given:
-        String html = null
-        PolicyFactory policy =
-                Sanitizers.FORMATTING
-                        .and(Sanitizers.BLOCKS)
-                        .and(Sanitizers.LINKS)
-                        .and(Sanitizers.IMAGES)
-                        .and(Sanitizers.TABLES);
-        String safeHtml = policy.sanitize(html);
+        Long id = 1L
+        String title = "Test"
+        String body = "This is a test"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson =
+                objectMapper.writeValueAsString(
+                        EntryMapper.INSTANCE.map(entry))
+        entryRepository.save(entry) >> entry
+        String contentType = "application/json"
+        String uri = "/blog-entries"
 
-        expect:
-        null == safeHtml
+        when:
+        def response = mvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(requestBodyJson)
+                .contentType(contentType))
+
+        then:
+        response.andExpect(status().isCreated())
+    }
+
+    def "html in input should return 500"() {
+        given:
+        Long id = 1L
+        String title = "<h1>Test</h1>"
+        String body = "<p>This is a test</p>"
+        String contentType = "application/json"
+        String uri = "/blog-entries"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson = objectMapper.writeValueAsString(EntryMapper.INSTANCE.map(entry))
+
+        when:
+        def response = mvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(requestBodyJson)
+                .contentType(contentType))
+
+        then:
+        response.andExpect(status().is5xxServerError())
+    }
+
+    def "another OWASP test"() {
+        given:
+        String str = "<h1>Hello</h1>"
+
+        PolicyFactory policy =
+                new HtmlPolicyBuilder()
+                        .toFactory();
+
+        when:
+        String safeStr = policy.sanitize(str)
+
+        then:
+        safeStr == "Hello"
 
     }
 

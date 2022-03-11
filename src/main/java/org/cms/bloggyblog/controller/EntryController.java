@@ -1,12 +1,12 @@
 package org.cms.bloggyblog.controller;
 
+import org.cms.bloggyblog.annotation.NoHtml;
 import org.cms.bloggyblog.mapper.EntryMapper;
 import org.cms.bloggyblog.model.transfer.Entry;
 import org.cms.bloggyblog.service.EntryService;
-import org.owasp.html.PolicyFactory;
-import org.owasp.html.Sanitizers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(path = "/blog-entries")
@@ -31,13 +31,13 @@ public class EntryController {
   }
 
   @GetMapping(path = {"/", ""})
-  public List<org.cms.bloggyblog.model.entity.Entry> getAllEntries() {
-    return entryService.getAllEntries();
+  public List<Entry> getAllEntries() {
+    return entryService.getAllEntries().stream().map(EntryMapper.INSTANCE::map).collect(Collectors.toList());
   }
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping
-  public Entry addEntry(@RequestBody Entry entry) {
+  public Entry addEntry(@RequestBody @Validated Entry entry) {
     return EntryMapper.INSTANCE.map(entryService.save(EntryMapper.INSTANCE.map(entry)));
   }
 
