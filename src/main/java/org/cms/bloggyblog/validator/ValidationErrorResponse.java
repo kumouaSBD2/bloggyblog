@@ -5,10 +5,9 @@ import java.util.List;
 
 public class ValidationErrorResponse {
 
-    private final List<Violation> violations = new ArrayList<>();
+  private final List<Violation> violations = new ArrayList<>();
 
-    public List<Violation> getViolations() {
-        return violations;
-    }
-
+  public List<Violation> getViolations() {
+    return violations;
+  }
 }

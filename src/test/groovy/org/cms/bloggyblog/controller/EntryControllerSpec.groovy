@@ -6,8 +6,6 @@ import org.cms.bloggyblog.model.entity.Entry
 import org.cms.bloggyblog.repository.EntryRepository
 import org.codehaus.jackson.map.ObjectMapper
 import org.jeasy.random.EasyRandom
-import org.owasp.html.HtmlPolicyBuilder
-import org.owasp.html.PolicyFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -15,8 +13,6 @@ import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 import spock.lang.Specification
-
-import javax.validation.ConstraintViolation
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
@@ -102,7 +98,7 @@ class EntryControllerSpec extends Specification {
         response.andExpect(status().isCreated())
     }
 
-    def "html in input should return 500"() {
+    def "html in input should return 400"() {
         given:
         Long id = 1L
         String title = "<h1>Test</h1>"
@@ -119,23 +115,74 @@ class EntryControllerSpec extends Specification {
                 .contentType(contentType))
 
         then:
-        response.andExpect(status().is5xxServerError())
+        response.andExpect(status().is4xxClientError())
     }
 
-    def "another OWASP test"() {
+    def "violation message when html present in title and body"() {
         given:
-        String str = "<h1>Hello</h1>"
-
-        PolicyFactory policy =
-                new HtmlPolicyBuilder()
-                        .toFactory();
+        Long id = 1L
+        String title = "<h1>Test</h1>"
+        String body = "<p>This is a test</p>"
+        String contentType = "application/json"
+        String uri = "/blog-entries"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson = objectMapper.writeValueAsString(EntryMapper.INSTANCE.map(entry))
+        String violationMessage = "No HTML is allowed"
 
         when:
-        String safeStr = policy.sanitize(str)
+        def response = mvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(requestBodyJson)
+                .contentType(contentType))
 
         then:
-        safeStr == "Hello"
+        response.andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath('$.violations[0].message').value(violationMessage))
+                .andExpect(MockMvcResultMatchers.jsonPath('$.violations[1].message').value(violationMessage))
+    }
 
+    def "violation message when html present in title"() {
+        given:
+        Long id = 1L
+        String title = "<h1>Test</h1>"
+        String body = "This is a test"
+        String contentType = "application/json"
+        String uri = "/blog-entries"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson = objectMapper.writeValueAsString(EntryMapper.INSTANCE.map(entry))
+        String violationMessage = "No HTML is allowed"
+
+        when:
+        def response = mvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(requestBodyJson)
+                .contentType(contentType))
+
+        then:
+        response.andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath('$.violations[0].message').value(violationMessage))
+    }
+
+    def "violation message when html present in body"() {
+        given:
+        Long id = 1L
+        String title = "Test"
+        String body = "<div>This is a test</div>"
+        String contentType = "application/json"
+        String uri = "/blog-entries"
+        Entry entry = Entry.builder().id(id).body(body).title(title).build()
+        String requestBodyJson = objectMapper.writeValueAsString(EntryMapper.INSTANCE.map(entry))
+        String violationMessage = "No HTML is allowed"
+
+        when:
+        def response = mvc.perform(MockMvcRequestBuilders
+                .post(uri)
+                .content(requestBodyJson)
+                .contentType(contentType))
+
+        then:
+        response.andExpect(status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.jsonPath('$.violations[0].message').value(violationMessage))
     }
 
 }

@@ -17,31 +17,38 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ValidatorControllerAdvice {
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
-        log.info(" inside onConstraintValidationException  " + e.getMessage());
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        error.getViolations().addAll(e.getConstraintViolations().stream().map(
-                        violation -> new Violation(violation.getPropertyPath().toString(), violation.getMessage()))
+  @ExceptionHandler(ConstraintViolationException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
+    log.info(" inside onConstraintValidationException  " + e.getMessage());
+    ValidationErrorResponse error = new ValidationErrorResponse();
+    error
+        .getViolations()
+        .addAll(
+            e.getConstraintViolations().stream()
+                .map(
+                    violation ->
+                        new Violation(
+                            violation.getPropertyPath().toString(), violation.getMessage()))
                 .collect(Collectors.toList()));
-        return error;
-    }
+    return error;
+  }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ResponseBody
-    public ValidationErrorResponse onMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
-        log.info(" inside onConstraintValidationException  " + e.getMessage());
-        ValidationErrorResponse error = new ValidationErrorResponse();
-        error.getViolations().addAll(e.getBindingResult().getFieldErrors().stream()
-                .map(violation -> new Violation(violation.getField(), violation.getDefaultMessage()))
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ResponseBody
+  public ValidationErrorResponse onMethodArgumentNotValidException(
+      MethodArgumentNotValidException e) {
+    log.info(" inside onConstraintValidationException  " + e.getMessage());
+    ValidationErrorResponse error = new ValidationErrorResponse();
+    error
+        .getViolations()
+        .addAll(
+            e.getBindingResult().getFieldErrors().stream()
+                .map(
+                    violation -> new Violation(violation.getField(), violation.getDefaultMessage()))
                 .collect(Collectors.toList()));
-        return error;
-    }
-
-
-
+    return error;
+  }
 }
